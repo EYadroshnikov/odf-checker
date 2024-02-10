@@ -1,16 +1,55 @@
-const validate = (schema) => (req, res, next) => {
-    const validSchema = pick(schema, ['params', 'query', 'body']);
-    const object = pick(req, Object.keys(validSchema));
-    const { value, error } = Joi.compile(validSchema)
-        .prefs({ errors: { label: 'key' }, abortEarly: false })
-        .validate(object);
+import Joi from "joi";
 
-    if (error) {
-        const errorMessage = error.details.map((details) => details.message).join(', ');
-        return next(new ApiError(httpStatus.BAD_REQUEST, errorMessage));
+
+export default {
+    validateRequestBody(schema){
+        return (req, res, next) => {
+            const result = schema.validate(req.body);
+            // console.log(result)
+            if (result.error) {
+                return res.status(400).json({
+                    error: result.error.details[0].message,
+                });
+            }
+            if (!req.value) {
+                req.value = {};
+            }
+            req.value['body'] = result.value;
+            next();
+        }
+    },
+
+    validateRequestQuery(schema){
+        return (req, res, next) => {
+            const result = schema.validate(req.query);
+            // console.log(result)
+            if (result.error) {
+                return res.status(400).json({
+                    error: result.error.details[0].message,
+                });
+            }
+            if (!req.value) {
+                req.value = {};
+            }
+            req.value['query'] = result.value;
+            next();
+        }
+    },
+
+    validateRequestParams(schema){
+        return (req, res, next) => {
+            const result = schema.validate(req.params);
+            // console.log(result)
+            if (result.error) {
+                return res.status(400).json({
+                    error: result.error.details[0].message,
+                });
+            }
+            if (!req.value) {
+                req.value = {};
+            }
+            req.value['params'] = result.value;
+            next();
+        }
     }
-    Object.assign(req, value);
-    return next();
-};
-
-export default validate;
+}
