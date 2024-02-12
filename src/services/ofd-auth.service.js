@@ -1,17 +1,13 @@
 import axios from 'axios';
+import {config} from "../config/config.js";
 
 
 export default {
-    async createAuthToken(data){
-        try{
-            return await axios.post('https://demo.ofd.ru/api/Authorization/CreateAuthToken',
-                {
-                    "Login": data.login,
-                    "Password": data.password
-                });
-        } catch (e){
-            console.log(e)
-            return e
-        }
+    async retrieveAuthToken(data) {
+        return axios.post(`${config.apiUrl}/api/Authorization/CreateAuthToken`,
+            {
+                "Login": data.login,
+                "Password": data.password
+            });
     }
 }
