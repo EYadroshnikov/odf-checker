@@ -2,7 +2,7 @@
  * Data Transfer Object (DTO) for OFD records.
  * Represents the structure of an OFD record with various financial sums.
  */
-class OfdDto {
+export class OfdDto {
     /**
      * Unique identifier for the OFD record.
      */

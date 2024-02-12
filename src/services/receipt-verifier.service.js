@@ -1,3 +1,4 @@
+import {InconsistentReceiptDto} from "../dtos/inconsistent-receipt.dto.js";
 
 export default {
     /**

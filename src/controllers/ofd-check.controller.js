@@ -1,8 +1,26 @@
 import ofdAuthService from "../services/ofd-auth.service.js";
 import ofdDataService from "../services/ofd-data.service.js";
 import receiptVerifierService from "../services/receipt-verifier.service.js";
+import {OfdDto} from "../dtos/ofd.dto.js";
+import {BegginsDto} from "../dtos/beggins.dto.js";
 
 export default {
+    /**
+     * Performs a check against the OFD service to verify consistency of transaction data.
+     *
+     * @param {Request} req - Express HTTP request object containing user credentials and query parameters.
+     * @param {Response} res - Express HTTP response object used to send back responses.
+     *
+     * @description
+     * This function performs an asynchronous operation to authenticate the user, retrieve a list of receipts from the OFD service,
+     * compare it with a list from the Beggins database, and report any inconsistencies.
+     *
+     * @throws Will log an error message to the console and return an error response if authentication fails or if there are issues retrieving the list of receipts.
+     *
+     * @example
+     * app.post('/ofdCheck', ofdCheck);
+     * // User sends a POST request to '/ofdCheck' with body containing Login and Password, and query parameters for date range.
+     */
     async ofdCheck(req, res) {
         // authorization
         let authTokenResponse = await ofdAuthService.retrieveAuthToken({
@@ -40,10 +58,11 @@ export default {
 
 
         // getting a list of receipts from beggins database
+        //TODO: get the info from beggins
         let begginsDbResponse = [];
 
         let ofdDtos = ofdResponse.data["Data"].map(obj => new OfdDto(obj));
-        let begginsDtos = begginsDbResponse.data["Data"].map(obj => new OfdDto(obj));
+        let begginsDtos = begginsDbResponse.data["Data"].map(obj => new BegginsDto(obj));
 
         // checking the total amounts
         if (receiptVerifierService.checkTotalAmounts(ofdDtos, begginsDtos)) {
@@ -53,7 +72,7 @@ export default {
 
 
         // finding Inconsistencies
-        receiptVerifierService.findInconsistencies(ofdDtos, begginsDtos)
-
+        let inconsistencies = receiptVerifierService.findInconsistencies(ofdDtos, begginsDtos)
+        res.send(inconsistencies);
     }
 }
