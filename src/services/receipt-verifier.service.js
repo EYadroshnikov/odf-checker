@@ -34,14 +34,14 @@ export default {
     },
 
     /**
-     * Compares the total amounts of two lists of objects.
+     * Finds inconsistencies between two arrays of DTOs by comparing their IDs and total sums.
      *
      * @param {OfdDto[]} ofdDtos - An array of objects representing OFD receipts.
      * @param {BegginsDto[]} begginsDtos - An array of objects representing Beggins DB entries.
-     * @returns {InconsistentReceiptDto[]} - An array of Inconsistencies
+     * @returns {InconsistentReceiptDto[]} - An array of InconsistentReceiptDto instances representing the inconsistencies found
      */
     findInconsistencies(ofdDtos, begginsDtos) {
-        let [biggerArray, smallerArray] = ofdDtos.length >= begginsDtos ? ([ofdDtos, begginsDtos]) : ([begginsDtos, ofdDtos])
+        let [biggerArray, smallerArray] = ofdDtos.length >= begginsDtos.length ? ([ofdDtos, begginsDtos]) : ([begginsDtos, ofdDtos])
         let listOfInconsistencies = [];
         for (let biggerItem of biggerArray) {
             const foundItem = smallerArray.find(receipt => biggerItem.id === receipt.id);

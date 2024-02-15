@@ -72,7 +72,11 @@ export default {
 
 
         // finding Inconsistencies
-        let inconsistencies = receiptVerifierService.findInconsistencies(ofdDtos, begginsDtos)
-        res.send(inconsistencies);
+        let inconsistencies = receiptVerifierService.findInconsistencies(ofdDtos, begginsDtos);
+        let notFoundReceipts = inconsistencies.filter(item => item.error === "not found");
+        let amountsInconsistencies = inconsistencies.filter(item => item.error === "different amounts");
+
+
+        res.send({"not_found": notFoundReceipts, "amounts_inconsistencies": amountsInconsistencies});
     }
 }
