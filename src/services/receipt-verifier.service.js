@@ -5,11 +5,11 @@ export default {
      * Compares the total amounts of two lists of objects.
      *
      * @param {OfdDto[]} ofdDtos - An array of objects representing OFD receipts.
-     * @param {BegginsDto[]} begginsDtos - An array of objects representing Beggins DB entries.
+     * @param {BagginsDto[]} bagginsDtos - An array of objects representing Beggins DB entries.
      * @returns {boolean} True if the total amounts match, false otherwise.
      */
-    checkTotalAmounts(ofdDtos, begginsDtos) {
-        if (ofdDtos.length !== begginsDtos.length) {
+    checkTotalAmounts(ofdDtos, bagginsDtos) {
+        if (ofdDtos.length !== bagginsDtos.length) {
             return false;
         }
 
@@ -22,7 +22,7 @@ export default {
         }, 0);
 
         //TODO: figure out the sum name
-        let totalBegginsAmounts = begginsDtos.reduce((accumulator, currentValue) => {
+        let totalBegginsAmounts = bagginsDtos.reduce((accumulator, currentValue) => {
             if (currentValue.hasOwnProperty('IDK THIS NAME')) {
                 return accumulator + currentValue["IDK THIS NAME"];
             } else {
@@ -37,11 +37,11 @@ export default {
      * Finds inconsistencies between two arrays of DTOs by comparing their IDs and total sums.
      *
      * @param {OfdDto[]} ofdDtos - An array of objects representing OFD receipts.
-     * @param {BegginsDto[]} begginsDtos - An array of objects representing Beggins DB entries.
+     * @param {BagginsDto[]} bagginsDtos - An array of objects representing Beggins DB entries.
      * @returns {InconsistentReceiptDto[]} - An array of InconsistentReceiptDto instances representing the inconsistencies found
      */
-    findInconsistencies(ofdDtos, begginsDtos) {
-        let [biggerArray, smallerArray] = ofdDtos.length >= begginsDtos.length ? ([ofdDtos, begginsDtos]) : ([begginsDtos, ofdDtos])
+    findInconsistencies(ofdDtos, bagginsDtos) {
+        let [biggerArray, smallerArray] = ofdDtos.length >= bagginsDtos.length ? ([ofdDtos, bagginsDtos]) : ([bagginsDtos, ofdDtos])
         let listOfInconsistencies = [];
         for (let biggerItem of biggerArray) {
             const foundItem = smallerArray.find(receipt => biggerItem.id === receipt.id);

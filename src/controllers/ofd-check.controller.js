@@ -2,7 +2,7 @@ import ofdAuthService from "../services/ofd-auth.service.js";
 import ofdDataService from "../services/ofd-data.service.js";
 import receiptVerifierService from "../services/receipt-verifier.service.js";
 import {OfdDto} from "../dtos/ofd.dto.js";
-import {BegginsDto} from "../dtos/beggins.dto.js";
+import {BagginsDto} from "../dtos/baggins.dto.js";
 
 export default {
     /**
@@ -50,29 +50,34 @@ export default {
         });
 
         // console.log(ofdResponse.response)
-        if (ofdResponse.response?.status !== 200) {
-            res.status(ofdResponse.response?.status).send(ofdResponse.response.data['Errors'])
+        if (ofdResponse.status !== 200) {
+            // console.log(ofdResponse)
+            res.send(ofdResponse.response)
             return;
         }
-        console.log(ofdResponse.response);
+        // console.log(ofdResponse.response);
 
 
         // getting a list of receipts from beggins database
         //TODO: get the info from beggins
         let begginsDbResponse = [];
-
+        // console.log(ofdResponse.data["Data"])
         let ofdDtos = ofdResponse.data["Data"].map(obj => new OfdDto(obj));
-        let begginsDtos = begginsDbResponse.data["Data"].map(obj => new BegginsDto(obj));
-
+        // let bagginsDtos = begginsDbResponse.data["Data"].map(obj => new BagginsDto(obj));
+        const bagginsDtos = [
+            new BagginsDto({ id: 1, totalSum: 100 }),
+            new BagginsDto({ id: 2, totalSum: 150 }),
+            new BagginsDto({ id: 3, totalSum: 200 })
+        ];
         // checking the total amounts
-        if (receiptVerifierService.checkTotalAmounts(ofdDtos, begginsDtos)) {
+        if (receiptVerifierService.checkTotalAmounts(ofdDtos, bagginsDtos)) {
             res.status(200).send('The amounts are equal');
             return;
         }
 
 
         // finding Inconsistencies
-        let inconsistencies = receiptVerifierService.findInconsistencies(ofdDtos, begginsDtos);
+        let inconsistencies = receiptVerifierService.findInconsistencies(ofdDtos, bagginsDtos);
         let notFoundReceipts = inconsistencies.filter(item => item.error === "not found");
         let amountsInconsistencies = inconsistencies.filter(item => item.error === "different amounts");
 

@@ -1,4 +1,4 @@
-export class BegginsDto {
+export class BagginsDto {
     //TODO: find out fields to use
     id;
     totalSum;
