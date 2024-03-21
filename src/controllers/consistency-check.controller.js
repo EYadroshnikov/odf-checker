@@ -18,10 +18,10 @@ export default {
      * @throws Will log an error message to the console and return an error response if authentication fails or if there are issues retrieving the list of receipts.
      *
      * @example
-     * app.post('/ofdCheck', ofdCheck);
-     * // User sends a POST request to '/ofdCheck' with body containing Login and Password, and query parameters for date range.
+     * app.post('/check-specified-cash-register', checkSpecifiedCashRegister);
+     * // User sends a POST request to '/check-specified-cash-register' with body containing Login and Password, and query parameters for date range.
      */
-    async ofdCheck(req, res) {
+    async checkSpecifiedCashRegister(req, res) {
         // authorization
         let authTokenResponse = await ofdAuthService.retrieveAuthToken({
             login: req.body.Login,
