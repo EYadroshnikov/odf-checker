@@ -3,6 +3,7 @@ import ofdDataService from "../services/ofd-data.service.js";
 import receiptVerifierService from "../services/receipt-verifier.service.js";
 import {OfdDto} from "../dtos/ofd.dto.js";
 import {BagginsDto} from "../dtos/baggins.dto.js";
+import bagginsDataService from "../services/baggins-data.service.js";
 
 export default {
     /**
@@ -37,7 +38,7 @@ export default {
         }
 
         // getting a list of receipts from OFD
-        let ofdResponse = await ofdDataService.getListOfReceipts({
+        let ofdResponse = await ofdDataService.getListOfReceiptsOfSpecifiedCashRegister({
             inn: req.params.inn,
             kkt: req.params.kkt,
             dateFrom: req.query.dateFrom,
@@ -60,13 +61,15 @@ export default {
 
         // getting a list of receipts from beggins database
         //TODO: get the info from beggins
-        let begginsDbResponse = [];
+        let begginsDbResponse = bagginsDataService.getListOfReceipts();
         // console.log(ofdResponse.data["Data"])
+
+
         let ofdDtos = ofdResponse.data["Data"].map(obj => new OfdDto(obj));
         // let bagginsDtos = begginsDbResponse.data["Data"].map(obj => new BagginsDto(obj));
         const bagginsDtos = [
             new BagginsDto({ id: 1, totalSum: 100 }),
-            new BagginsDto({ id: 2, totalSum: 150 }),
+            new BagginsDto({ id: "1fe7d306-ae4c-6ae2-5273-13f1770aa620", totalSum: 150 }),
             new BagginsDto({ id: 3, totalSum: 200 })
         ];
         // checking the total amounts

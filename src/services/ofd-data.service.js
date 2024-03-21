@@ -20,7 +20,7 @@ export default {
      *
      * @throws {Error} If the request fails due to network issues or invalid parameters.
      */
-    async getListOfReceipts(requestData) {
+    async getListOfReceiptsOfSpecifiedCashRegister(requestData) {
         return axios.get(
             `${config.apiUrl}/api/integration/v1/inn/${requestData.inn}/kkt/${requestData.kkt}/receipts?dateFrom=${requestData.dateFrom}&dateTo=${requestData.dateTo}&AuthToken=${requestData.authToken}`)
     }
